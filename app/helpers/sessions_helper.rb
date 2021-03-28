@@ -43,8 +43,19 @@ module SessionsHelper
     @current_user = nil
   end
 
-# チェックボックスがチェックされたらリメンバーする
-  def remember_me(user)
-    params[:session][:remember_me] == "1" ? remember(user) : forget(user)
+
+  def current_user?(user)
+    user && user == current_user
+  end
+
+  # 記憶したURL（もしくはデフォルト値）にリダイレクトさせる
+  def redirect_back_or(default)
+    redirect_to(session[:forwarding_url] || default)
+    session.delete(:forwarding_url)
+  end
+
+  # アクセスしようとしたURLを記憶しておく
+  def store_location
+    session[:forwarding_url] = request.original_url if request.get?
   end
 end
