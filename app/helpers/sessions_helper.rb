@@ -19,7 +19,7 @@ module SessionsHelper
     # session[:user_id]に情報がない場合、cookies情報を確認してcookiesにユーザー情報がある場合@current_userをセットする
     elsif (user_id = cookies.signed[:user_id])
       user = User.find_by(id: user_id)
-      if user && user.authenticated?(cookies[:remember_token])
+      if user && user.authenticated?(:remember,cookies[:remember_token])
         log_in user
         @current_user = user
       end
